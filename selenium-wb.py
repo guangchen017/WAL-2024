@@ -184,6 +184,8 @@ def auto_fillout(url):
     submit_button = browser.find_element(By.CSS_SELECTOR, "button.el-button.el-button--primary.el-button--large")
     submit_button.click()
 
+    browser.quit()
+
 
 # 脚本主入口
 if __name__ == "__main__":
