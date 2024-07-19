@@ -24,7 +24,6 @@ def auto_fillout(url):
     for index, room in enumerate(rooms):
         room.click()
         if index == 0:
-            print("000")
             try:
                 element1 = browser.find_elements(By.XPATH, "/html/body/div[2]/div[1]/div[1]/div[1]/ul/li/span")
                 # 检查第一列是否有选项
@@ -49,11 +48,9 @@ def auto_fillout(url):
 
             except Exception as e:
                 print(f"Error selecting cascader options: {e}")
-            time.sleep(10)
+            time.sleep(5)
 
         elif index == 1:
-            print("111")
-
             # 所在地
 
             try:
@@ -93,8 +90,6 @@ def auto_fillout(url):
                 print(f"Error selecting cascader options: {e}")
 
         elif index == 2:
-            print("222")
-
             # 网龄
 
             try:
@@ -178,11 +173,11 @@ def auto_fillout(url):
             except Exception as e:
                 print(f"Error clicking checkbox in group: {e}")
 
-    time.sleep(15)
-
     # 提交
     submit_button = browser.find_element(By.CSS_SELECTOR, "button.el-button.el-button--primary.el-button--large")
     submit_button.click()
+
+    time.sleep(random.randint(14,18))
 
     browser.quit()
 
@@ -195,22 +190,6 @@ if __name__ == "__main__":
     # 用户输入 URL
     url = input("请输入问卷的 URL: ")
 
-    # 创建并启动线程的循环
     for i in range(num_runs):
-        # 创建线程列表以跟踪所有线程
-        threads = []
-        for j in range(5):  # 这里假设总是想要启动5个线程
-            thread = threading.Thread(target=auto_fillout, args=(url,))
-            threads.append(thread)
-            thread.start()
-            print(f"启动线程 {thread.name} 进行第 {i+1} 次运行")
-
-            # 这里可以添加 sleep 来控制启动线程的间隔，如果需要的话
-            # time.sleep(1)
-
-        # 等待所有线程完成
-        for thread in threads:
-            thread.join()
-            print(f"线程 {thread.name} 完成")
-
-        print(f"第 {i+1} 次运行完成")
+        auto_fillout(url)
+        print(f"NO.{i+1}")
