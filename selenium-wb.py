@@ -187,26 +187,28 @@ def auto_fillout(url):
 
 # 脚本主入口
 if __name__ == "__main__":
-    url = input("请输入完整url：")  # 这是问卷的 URL
-    # 调用多线程填写问卷
-    thread1 = threading.Thread(target=auto_fillout(url))
-    thread2 = threading.Thread(target=auto_fillout(url))
-    thread3 = threading.Thread(target=auto_fillout(url))
-    thread4 = threading.Thread(target=auto_fillout(url))
-    thread5 = threading.Thread(target=auto_fillout(url))
-    # 启动线程
-    thread1.start()
-    time.sleep(1)
-    thread2.start()
-    time.sleep(1)
-    thread3.start()
-    time.sleep(1)
-    thread4.start()
-    time.sleep(1)
-    thread5.start()
-    # 等待线程完成
-    thread1.join()
-    thread2.join()
-    thread3.join()
-    thread4.join()
-    thread5.join()
+    # 用户输入要运行的次数
+    num_runs = int(input("请输入要运行的次数: "))
+
+    # 用户输入 URL
+    url = input("请输入问卷的 URL: ")
+
+    # 创建并启动线程的循环
+    for i in range(num_runs):
+        # 创建线程列表以跟踪所有线程
+        threads = []
+        for j in range(5):  # 这里假设总是想要启动5个线程
+            thread = threading.Thread(target=auto_fillout, args=(url,))
+            threads.append(thread)
+            thread.start()
+            print(f"启动线程 {thread.name} 进行第 {i+1} 次运行")
+
+            # 这里可以添加 sleep 来控制启动线程的间隔，如果需要的话
+            # time.sleep(1)
+
+        # 等待所有线程完成
+        for thread in threads:
+            thread.join()
+            print(f"线程 {thread.name} 完成")
+
+        print(f"第 {i+1} 次运行完成")
