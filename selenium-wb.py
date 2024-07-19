@@ -1,0 +1,212 @@
+import random
+import threading
+import time
+
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+
+def auto_fillout(url):
+    driver_path = "chromedriver.exe"
+
+    # 可以避免智能验证码的选项
+    option = webdriver.ChromeOptions()
+    option.add_experimental_option('excludeSwitches', ['enable-automation'])
+    option.add_experimental_option('useAutomationExtension', False)
+
+    # 创建 Chrome 浏览器对象
+    browser = webdriver.Chrome(options=option)
+    browser.execute_cdp_cmd('Page.addScriptToEvaluateOnNewDocument',
+                            {'source': 'Object.defineProperty(navigator, "webdriver", {get: () => undefined})'})
+    browser.get(url)
+    time.sleep(2)
+
+    rooms = browser.find_elements(By.CSS_SELECTOR, '.el-input__icon.el-icon-arrow-down')
+    for index, room in enumerate(rooms):
+        room.click()
+        if index == 0:
+            print("000")
+            try:
+                element1 = browser.find_elements(By.XPATH, "/html/body/div[2]/div[1]/div[1]/div[1]/ul/li/span")
+                # 检查第一列是否有选项
+                if element1:
+                    # 固定选择一个选项
+                    option1 = element1[1]
+
+                    # 点击选择的选项
+                    browser.execute_script("arguments[0].click();", option1)
+                time.sleep(2)
+
+                # 第二列
+                element2 = browser.find_elements(By.XPATH, "/html/body/div[2]/div[1]/div[2]/div[1]/ul/li/span")
+                # 检查第二列是否有选项
+                if element2:
+                    # 随机选择一个选项
+                    option2 = random.choice(element2)
+
+                    # 点击随机选择的选项
+                    browser.execute_script("arguments[0].click();", option2)
+                time.sleep(2)
+
+            except Exception as e:
+                print(f"Error selecting cascader options: {e}")
+            time.sleep(10)
+
+        elif index == 1:
+            print("111")
+
+            # 所在地
+
+            try:
+                # 第一列
+                sheng = browser.find_elements(By.XPATH, "/html/body/div[3]/div[1]/div/div[1]/ul/li/span")
+                # 检查第一列是否有选项
+                if sheng:
+                    # 随机选择一个选项
+                    option1 = random.choice(sheng)
+
+                    # 点击选择的选项
+                    browser.execute_script("arguments[0].click();", option1)
+                time.sleep(2)
+
+                # 第二列
+                shi = browser.find_elements(By.XPATH, "/html/body/div[3]/div[1]/div[2]/div[1]/ul/li/span")
+                # 检查第二列是否有选项
+                if shi:
+                    # 随机选择一个选项
+                    option2 = random.choice(shi)
+
+                    # 点击随机选择的选项
+                    browser.execute_script("arguments[0].click();", option2)
+
+                # 第三列
+                qv = browser.find_elements(By.XPATH, "/html/body/div[3]/div[1]/div[3]/div[1]/ul/li/span")
+
+                if qv:
+                    # 随机选择一个选项
+                    option3 = random.choice(qv)
+
+                    # 点击随机选择的选项
+                    browser.execute_script("arguments[0].click();", option3)
+                time.sleep(2)
+
+            except Exception as e:
+                print(f"Error selecting cascader options: {e}")
+
+        elif index == 2:
+            print("222")
+
+            # 网龄
+
+            try:
+                # 第一列
+                column1 = browser.find_elements(By.XPATH, "/html/body/div[4]/div[1]/div[1]/div[1]/ul/li/span")
+                # 检查第一列是否有选项
+                if column1:
+                    # 选择一个选项
+                    option1 = column1[1]
+
+                    # 点击随机选择的选项
+                    browser.execute_script("arguments[0].click();", option1)
+                time.sleep(2)
+
+                # 第二列
+                column2 = browser.find_elements(By.XPATH, "/html/body/div[4]/div[1]/div[2]/div[1]/ul/li/span")
+                # 检查第二列是否有选项
+                if column2:
+                    # 随机选择一个选项
+                    random_index = random.randint(0, 5)
+                    option2 = column2[random_index]
+                    # option2 = random.choice(column2)
+
+                    # 点击随机选择的选项
+                    browser.execute_script("arguments[0].click();", option2)
+                time.sleep(2)
+
+            except Exception as e:
+                print(f"Error selecting cascader options: {e}")
+
+    # 单选题
+    answerxx = browser.find_elements(By.CSS_SELECTOR, '.el-radio')
+    num = len(answerxx)
+    a1 = random.randint(0, 1)
+    a2 = random.randint(5, 7)
+    a3 = 14
+    a4 = 23
+    a5 = random.randint(24, 25)
+    a6 = random.randint(26, 29)
+    a7 = random.randint(32, 36)
+    a8 = random.randint(37, 41)
+    a9 = random.randint(44, 46)
+    a10 = random.randint(47, 48)
+    a11 = random.randint(52, 53)
+    for index, answer in enumerate(answerxx):
+        if index == a1 or index == a2 or index == a3 or index == a4 or index == a5 or index == a6 or index == a7 or index == a8 or index == a9 or index == a10 or index == a11:
+            try:
+                answer.click()
+                time.sleep(1)
+            except Exception as e:
+                print("error clickx!!!")
+
+    #评分
+    answeryy = browser.find_elements(By.CSS_SELECTOR, '.el-rate .el-rate__item:nth-child(8)')
+    for answer in answeryy:
+        try:
+            answer.click()
+            time.sleep(1)
+        except Exception as e:
+            print("error clickx!!!")
+
+    # 多选题
+
+    # 定位所有多选题组
+    groups = browser.find_elements(By.CSS_SELECTOR, '.tc-checkbox-group')
+
+    for group in groups:
+        # 定位每组内的复选框
+        checkboxes = group.find_elements(By.CSS_SELECTOR, '.el-checkbox__input')
+        # 随机选择几个复选框进行点击
+        selected_checkboxes = random.sample(checkboxes[:-1], k=random.randint(1, len(checkboxes) - 2))
+
+        for checkbox in selected_checkboxes:
+            try:
+                # 确保元素可交互
+                if not checkbox.is_displayed():
+                    element_position = group.location_once_scrolled_into_view
+                    browser.execute_script("window.scrollTo(%s, %s);" % (element_position['x'], element_position['y']))
+                checkbox.click()
+                time.sleep(1)
+            except Exception as e:
+                print(f"Error clicking checkbox in group: {e}")
+
+    time.sleep(15)
+
+    # 提交
+    submit_button = browser.find_element(By.CSS_SELECTOR, "button.el-button.el-button--primary.el-button--large")
+    submit_button.click()
+
+
+# 脚本主入口
+if __name__ == "__main__":
+    url = input("请输入完整url：")  # 这是问卷的 URL
+    # 调用多线程填写问卷
+    thread1 = threading.Thread(target=auto_fillout(url))
+    thread2 = threading.Thread(target=auto_fillout(url))
+    thread3 = threading.Thread(target=auto_fillout(url))
+    thread4 = threading.Thread(target=auto_fillout(url))
+    thread5 = threading.Thread(target=auto_fillout(url))
+    # 启动线程
+    thread1.start()
+    time.sleep(1)
+    thread2.start()
+    time.sleep(1)
+    thread3.start()
+    time.sleep(1)
+    thread4.start()
+    time.sleep(1)
+    thread5.start()
+    # 等待线程完成
+    thread1.join()
+    thread2.join()
+    thread3.join()
+    thread4.join()
+    thread5.join()
