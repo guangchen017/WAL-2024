@@ -142,13 +142,38 @@ def auto_fillout(url):
                 print("error clickx!!!")
 
     #评分
-    answeryy = browser.find_elements(By.CSS_SELECTOR, '.el-rate .el-rate__item:nth-child(8)')
-    for answer in answeryy:
-        try:
-            answer.click()
-            time.sleep(1)
-        except Exception as e:
-            print("error clickx!!!")
+    random_numbers = [random.randint(7, 9) for _ in range(12)]
+    # 找出7、8、9各自所在的位置
+    positions_7 = [index for index, num in enumerate(random_numbers) if num == 7]
+    positions_8 = [index for index, num in enumerate(random_numbers) if num == 8]
+    positions_9 = [index for index, num in enumerate(random_numbers) if num == 9]
+
+    answer7 = browser.find_elements(By.CSS_SELECTOR, '.el-rate .el-rate__item:nth-child(7)')
+    for index,answer in enumerate(answer7):
+        if index in positions_7:
+            try:
+                answer.click()
+                time.sleep(1)
+            except Exception as e:
+                print("error clickx!!!")
+
+    answer8 = browser.find_elements(By.CSS_SELECTOR, '.el-rate .el-rate__item:nth-child(8)')
+    for index,answer in enumerate(answer8):
+        if index in positions_8:
+            try:
+                answer.click()
+                time.sleep(1)
+            except Exception as e:
+                print("error clickx!!!")
+
+    answer9 = browser.find_elements(By.CSS_SELECTOR, '.el-rate .el-rate__item:nth-child(9)')
+    for index,answer in enumerate(answer9):
+        if index in positions_9:
+            try:
+                answer.click()
+                time.sleep(1)
+            except Exception as e:
+                print("error clickx!!!")
 
     # 多选题
 
